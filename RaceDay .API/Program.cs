@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RaceDay_.API.Data;
+using RaceDay_.API.Services;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add controllers
 builder.Services.AddControllers();
+
+// Register Azure Blob Storage service
+builder.Services.AddScoped<AzureBlobStorageService>();
 
 // Configure SQL Server database connection
 builder.Services.AddDbContext<RaceDayDbContext>(options =>
@@ -92,4 +96,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
 public partial class Program { }

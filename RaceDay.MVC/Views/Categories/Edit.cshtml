@@ -1,0 +1,127 @@
+﻿@model RaceDay.MVC.Models.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="container mt-5">
+
+    <h1>Edit Race Category</h1>
+    <p>Update the details of this race category.</p>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <a asp-controller="Categories"
+       asp-action="Index"
+       class="btn btn-secondary mb-3">
+        Back to Categories
+    </a>
+
+    <div class="card shadow-sm p-4">
+
+        <form asp-controller="Categories"
+              asp-action="Edit"
+              asp-route-id="@Model.CategoryId"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   asp-for="CategoryId" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EventId" class="form-label">
+                    Select Event
+                </label>
+
+                <select asp-for="EventId"
+                        class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Events, "EventId", "Title"))">
+
+                    <option value="">-- Select an Event --</option>
+
+                </select>
+
+                <span asp-validation-for="EventId"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">
+                    Category Name
+                </label>
+
+                <input asp-for="Name"
+                       class="form-control" />
+
+                <span asp-validation-for="Name"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DistanceKm" class="form-label">
+                    Distance (km)
+                </label>
+
+                <input asp-for="DistanceKm"
+                       type="number"
+                       step="0.01"
+                       min="0.01"
+                       class="form-control" />
+
+                <span asp-validation-for="DistanceKm"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EntryFee" class="form-label">
+                    Entry Fee (R)
+                </label>
+
+                <input asp-for="EntryFee"
+                       type="number"
+                       step="0.01"
+                       min="0"
+                       class="form-control" />
+
+                <span asp-validation-for="EntryFee"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartTime" class="form-label">
+                    Event Start Date and Time
+                </label>
+
+                <input asp-for="StartTime"
+                       type="datetime-local"
+                       class="form-control" />
+
+                <span asp-validation-for="StartTime"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-success">
+                Save Changes
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

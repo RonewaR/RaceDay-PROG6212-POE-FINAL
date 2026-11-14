@@ -1,0 +1,168 @@
+﻿@model RaceDay.MVC.Models.OrganiserDashboardViewModel
+
+@{
+    ViewData["Title"] = "Organiser Dashboard";
+}
+
+<div class="container mt-5">
+
+    <h1>RaceDay Organiser Dashboard</h1>
+    <p>Welcome to your event management dashboard.</p>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-warning">
+            @ViewBag.Error
+        </div>
+    }
+
+    <h3 class="mt-4">Dashboard Summary</h3>
+
+    <div class="row mt-3">
+
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm text-center">
+                <h5>Total Events</h5>
+                <h2 class="text-primary">@Model.TotalEvents</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm text-center">
+                <h5>Total Enrolments</h5>
+                <h2 class="text-success">@Model.TotalEnrolments</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm text-center">
+                <h5>Upcoming Events</h5>
+                <h2 class="text-info">@Model.UpcomingEvents</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <h3 class="mt-4">Event Enrolment Summary</h3>
+
+    @if (Model.Events.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Enrolments</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Events)
+                    {
+                        <tr>
+                            <td>@item.Title</td>
+                            <td>@item.EventDate.ToString("dd MMM yyyy")</td>
+                            <td>@item.Location</td>
+                            <td>@item.EnrolmentCount</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">
+            No events are currently available for your account.
+        </p>
+    }
+
+    <hr />
+
+    <h3 class="mt-4">Management Options</h3>
+
+    <div class="row mt-3">
+
+        <!-- Manage Events -->
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm">
+                <h4>Manage Events</h4>
+                <p>Create, update and delete race events.</p>
+
+                <a asp-controller="Events"
+                   asp-action="Index"
+                   class="btn btn-primary">
+                    Manage Events
+                </a>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm">
+                <h4>Categories</h4>
+                <p>Manage race categories.</p>
+
+                <a asp-controller="Categories"
+                   asp-action="Index"
+                   class="btn btn-primary">
+                    Manage Categories
+                </a>
+            </div>
+        </div>
+
+        <!-- Enrolments -->
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm">
+                <h4>Enrolments</h4>
+                <p>View participant enrolments.</p>
+
+                <a asp-controller="Organiser"
+                   asp-action="ManageEnrolments"
+                   class="btn btn-primary">
+                    View Enrolments
+                </a>
+            </div>
+        </div>
+
+        <!-- Race Results -->
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm">
+                <h4>Race Results</h4>
+                <p>Enter and manage race results.</p>
+
+                <a asp-controller="Organiser"
+                   asp-action="ManageResults"
+                   class="btn btn-primary">
+                    Manage Results
+                </a>
+            </div>
+        </div>
+
+        <!-- Event Banners -->
+        <div class="col-md-4 mb-3">
+            <div class="card p-4 shadow-sm">
+                <h4>Event Banners</h4>
+                <p>Manage event banner images.</p>
+
+                <a href="#"
+                   class="btn btn-primary">
+                    Manage Banners
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Logout -->
+    <a asp-controller="Auth"
+       asp-action="Logout"
+       class="btn btn-danger mt-3">
+        Logout
+    </a>
+
+</div>

@@ -1,0 +1,98 @@
+﻿@model RaceDay.MVC.Models.EventViewModel
+
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<div class="container mt-4">
+
+    <h1>Edit Event</h1>
+    <p>Update the event details below.</p>
+
+    <a asp-action="Index" class="btn btn-secondary mb-3">
+        Back to Events
+    </a>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <form asp-action="Edit"
+          asp-route-id="@Model.EventId"
+          method="post"
+          enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="EventId" />
+        <input type="hidden" asp-for="OrganiserId" />
+        <input type="hidden" asp-for="ImageUrl" />
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">
+                Event Title
+            </label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">
+                Description
+            </label>
+            <textarea asp-for="Description"
+                      class="form-control"></textarea>
+            <span asp-validation-for="Description"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EventDate" class="form-label">
+                Event Date and Time
+            </label>
+            <input asp-for="EventDate"
+                   type="datetime-local"
+                   class="form-control"
+                   asp-format="{0:yyyy-MM-ddTHH:mm}" />
+            <span asp-validation-for="EventDate"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Location" class="form-label">
+                Location
+            </label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Replace Event Banner (Optional)
+            </label>
+
+            <input type="file"
+                   name="bannerFile"
+                   class="form-control"
+                   accept=".jpg,.jpeg,.png,.webp" />
+
+            <small class="text-muted">
+                Leave this empty to keep the current banner.
+                JPG, JPEG, PNG or WEBP. Maximum size: 5 MB.
+            </small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+        </button>
+
+    </form>
+
+</div>

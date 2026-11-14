@@ -1,0 +1,145 @@
+﻿@model List<RaceDay.MVC.Models.MyEnrolmentViewModel>
+
+@{
+    ViewData["Title"] = "Manage Results";
+}
+
+<div class="container mt-4">
+
+    <h1>Manage Race Results</h1>
+
+    <p>View enrolled participants and record their race results.</p>
+
+    <a asp-controller="Organiser"
+       asp-action="Index"
+       class="btn btn-secondary mb-3">
+        Back to Dashboard
+    </a>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (ViewBag.DebugMessage != null)
+    {
+        <div class="alert alert-warning">
+            @ViewBag.DebugMessage
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            No participant enrolments were found for your events.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success">
+            Found @Model.Count participant enrolment(s).
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Participant</th>
+                        <th>Event</th>
+                        <th>Category</th>
+                        <th>Enrolment ID</th>
+                        <th>Finish Time</th>
+                        <th>Position</th>
+                        <th>Did Not Finish</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var enrolment in Model)
+                    {
+                        <tr>
+                            <td>@enrolment.ParticipantName</td>
+                            <td>@enrolment.EventTitle</td>
+                            <td>@enrolment.CategoryName</td>
+                            <td>@enrolment.EnrolmentId</td>
+
+                            <td colspan="4">
+                                <form asp-controller="Organiser"
+                                      asp-action="RecordResult"
+                                      method="post"
+                                      class="row g-2">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="enrolmentId"
+                                           value="@enrolment.EnrolmentId" />
+
+                                    <div class="col-md-3">
+                                        <input type="text"
+                                               name="finishTime"
+                                               class="form-control"
+                                               placeholder="HH:mm:ss"
+                                               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+                                               title="Enter time as HH:mm:ss" />
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <input type="number"
+                                               name="position"
+                                               min="1"
+                                               class="form-control"
+                                               placeholder="Position" />
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-check mt-2">
+                                            <input type="checkbox"
+                                                   name="isDnf"
+                                                   value="true"
+                                                   class="form-check-input"
+                                                   id="dnf-@enrolment.EnrolmentId" />
+
+                                            <label class="form-check-label"
+                                                   for="dnf-@enrolment.EnrolmentId">
+                                                DNF
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="submit"
+                                                class="btn btn-success">
+                                            Save Result
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+
+</div>

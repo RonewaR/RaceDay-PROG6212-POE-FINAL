@@ -74,7 +74,10 @@ namespace RaceDay_.API.Controllers
 
             if (await _context.Users.AnyAsync(u => u.Email == email))
             {
-                return Conflict(new { message = "Email already registered." });
+                return Conflict(new
+                {
+                    message = "Email already registered."
+                });
             }
 
             var user = new User
@@ -128,8 +131,20 @@ namespace RaceDay_.API.Controllers
                 });
             }
 
-            var verification = _passwordHasher.VerifyHashedPassword(
-                user, user.PasswordHash, request.Password);
+            PasswordVerificationResult verification;
+
+            try
+            {
+                verification = _passwordHasher.VerifyHashedPassword(
+                    user, user.PasswordHash, request.Password);
+            }
+            catch (FormatException)
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid password hash. Please reset the password."
+                });
+            }
 
             if (verification == PasswordVerificationResult.Failed)
             {

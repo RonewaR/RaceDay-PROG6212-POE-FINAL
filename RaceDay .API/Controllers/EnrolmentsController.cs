@@ -55,6 +55,41 @@ namespace RaceDay_.API.Controllers
             return Ok(enrolments);
         }
 
+        // GET: api/Enrolments/my
+        // Participants can view only their own enrolments.
+        [HttpGet("my")]
+        [Authorize(Roles = "Participant")]
+        public async Task<IActionResult> GetMyEnrolments()
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier)
+                ?? User.FindFirst("userId");
+
+            if (claim == null ||
+                !int.TryParse(claim.Value, out int participantId))
+            {
+                return Unauthorized();
+            }
+
+            var enrolments = await _context.Enrolments
+                .AsNoTracking()
+                .Where(e => e.UserId == participantId)
+                .Select(e => new
+                {
+                    e.EnrolmentId,
+                    e.UserId,
+                    ParticipantName = e.User.FullName,
+                    e.CategoryId,
+                    CategoryName = e.Category.Name,
+                    EventId = e.Category.EventId,
+                    EventTitle = e.Category.Event.Title,
+                    e.EnrolmentDate,
+                    e.Status
+                })
+                .ToListAsync();
+
+            return Ok(enrolments);
+        }
+
         // POST: api/Enrolments
         // Participants enrol themselves in a category.
         [HttpPost]

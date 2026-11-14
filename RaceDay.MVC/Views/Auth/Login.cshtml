@@ -1,0 +1,55 @@
+﻿@model RaceDay.MVC.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Welcome Back</h2>
+    <p class="text-center">Log in to RaceDay</p>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <form asp-action="Login" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">
+                Email Address
+            </label>
+            <input asp-for="Email" type="email"
+                   class="form-control"
+                   placeholder="Enter your email" required />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">
+                Password
+            </label>
+            <input asp-for="Password" type="password"
+                   class="form-control"
+                   placeholder="Enter your password" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Login
+        </button>
+    </form>
+
+    <p class="text-center mt-3">
+        Don't have an account?
+        <a asp-action="Register">Register here</a>
+    </p>
+</div>

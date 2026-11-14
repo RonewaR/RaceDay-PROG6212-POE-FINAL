@@ -1,0 +1,217 @@
+﻿@model RaceDay.MVC.Models.ParticipantEventsViewModel
+
+@{
+    ViewData["Title"] = "Available Events";
+}
+
+<div class="container mt-4">
+
+    <h1>Available RaceDay Events</h1>
+
+    <p>Explore upcoming events, find a suitable location and choose a category to enter.</p>
+
+    <a asp-controller="Participant"
+       asp-action="Index"
+       class="btn btn-secondary mb-3">
+        Back to Dashboard
+    </a>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <!-- Event Search and Filters -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <h4>Find an Event</h4>
+
+            <form asp-controller="Participant"
+                  asp-action="Events"
+                  method="get">
+
+                <div class="row">
+
+                    <div class="col-md-5 mb-3">
+                        <label class="form-label">
+                            Search Event
+                        </label>
+
+                        <input type="text"
+                               name="searchTerm"
+                               value="@Model.SearchTerm"
+                               class="form-control"
+                               placeholder="Enter event name or description" />
+                    </div>
+
+                    <div class="col-md-5 mb-3">
+                        <label class="form-label">
+                            Filter by Location
+                        </label>
+
+                        <input type="text"
+                               name="locationFilter"
+                               value="@Model.LocationFilter"
+                               class="form-control"
+                               placeholder="Enter location" />
+                    </div>
+
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Search
+                        </button>
+                    </div>
+
+                </div>
+
+                <a asp-controller="Participant"
+                   asp-action="Events"
+                   class="btn btn-outline-secondary btn-sm">
+                    Clear Filters
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+    <h4 class="mb-3">Upcoming Events</h4>
+
+    @if (Model == null || Model.Events == null || !Model.Events.Any())
+    {
+        <div class="alert alert-info">
+            No upcoming events match your search.
+            Try changing your search or clearing the filters.
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model.Events)
+        {
+            <div class="card mb-4 shadow-sm">
+
+                @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                {
+                    <img src="@item.ImageUrl"
+                         class="card-img-top"
+                         alt="@item.Title event banner"
+                         style="height:250px; object-fit:cover;" />
+                }
+
+                <div class="card-body">
+
+                    <h3 class="card-title">
+                        @item.Title
+                    </h3>
+
+                    <p>@item.Description</p>
+
+                    <p>
+                        <strong>Date:</strong>
+                        @item.EventDate.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+
+                    <p>
+                        <strong>Location:</strong>
+                        @item.Location
+                    </p>
+
+                    <hr />
+
+                    <h5>Available Categories</h5>
+
+                    @{
+                        var categories = Model.Categories
+                        .Where(c => c.EventId == item.EventId)
+                        .ToList();
+                    }
+
+                    @if (!categories.Any())
+                    {
+                        <p class="text-muted">
+                            No categories are currently available for this event.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Distance</th>
+                                        <th>Entry Fee</th>
+                                        <th>Start Time</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var category in categories)
+                                    {
+                                        <tr>
+                                            <td>@category.Name</td>
+
+                                            <td>
+                                                @category.DistanceKm km
+                                            </td>
+
+                                            <td>
+                                                R @category.EntryFee.ToString("N2")
+                                            </td>
+
+                                            <td>
+                                                @category.StartTime.ToString("dd/MM/yyyy HH:mm")
+                                            </td>
+
+                                            <td>
+                                                <form asp-controller="Participant"
+                                                      asp-action="Enrol"
+                                                      method="post">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="categoryId"
+                                                           value="@category.CategoryId" />
+
+                                                    <button type="submit"
+                                                            class="btn btn-primary btn-sm">
+                                                        Enrol
+                                                    </button>
+
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        }
+    }
+
+</div>

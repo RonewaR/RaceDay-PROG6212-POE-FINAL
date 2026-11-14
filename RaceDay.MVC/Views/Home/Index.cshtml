@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "RaceDay - Home";
+}
+
+<div class="container py-5">
+    <div class="text-center p-5 rounded-4 shadow"
+         style="background: linear-gradient(135deg, #102A43, #087E8B); color: white;">
+
+        <h1 class="display-3 fw-bold mb-3">Welcome to RaceDay</h1>
+
+        <h4 class="mb-4">
+            Your Race. Your Results. Your Day.
+        </h4>
+
+        <p class="lead mb-4">
+            RaceDay is an event management system designed to help
+            organisers manage running events and participants manage
+            their enrolments and view their race results.
+        </p>
+
+        <a asp-controller="Auth"
+           asp-action="Login"
+           class="btn btn-light btn-lg me-2 mb-2">
+            Login
+        </a>
+
+        <a asp-controller="Auth"
+           asp-action="Register"
+           class="btn btn-outline-light btn-lg mb-2">
+            Register
+        </a>
+    </div>
+
+    <div class="row mt-5 text-center">
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>Event Management</h4>
+                    <p>
+                        Organisers can create, update and manage
+                        running events.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>Easy Enrolments</h4>
+                    <p>
+                        Participants can browse events and enrol
+                        in available race categories.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>Race Results</h4>
+                    <p>
+                        Participants can view their recorded
+                        race times and finishing positions.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -17,6 +17,9 @@ public partial class User
 
     public DateTime CreatedAt { get; set; }
 
+    // Participant profile picture URL
+    public string? ProfilePictureUrl { get; set; }
+
     public virtual ICollection<Enrolment> Enrolments { get; set; } = new List<Enrolment>();
 
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();

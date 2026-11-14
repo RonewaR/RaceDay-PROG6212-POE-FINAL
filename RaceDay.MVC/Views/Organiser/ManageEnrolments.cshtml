@@ -1,0 +1,94 @@
+﻿@model List<RaceDay.MVC.Models.MyEnrolmentViewModel>
+
+@{
+    ViewData["Title"] = "Manage Enrolments";
+}
+
+<div class="container mt-5">
+
+    <h1>Manage Participant Enrolments</h1>
+
+    <p>View participants registered for your race events.</p>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <a asp-controller="Organiser"
+       asp-action="Index"
+       class="btn btn-secondary mb-3">
+        Back to Dashboard
+    </a>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-striped">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Enrolment ID</th>
+                        <th>Participant</th>
+                        <th>Event</th>
+                        <th>Category</th>
+                        <th>Enrolment Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var enrolment in Model)
+                    {
+                        <tr>
+                            <td>@enrolment.EnrolmentId</td>
+
+                            <td>@enrolment.ParticipantName</td>
+
+                            <td>@enrolment.EventTitle</td>
+
+                            <td>@enrolment.CategoryName</td>
+
+                            <td>
+                                @enrolment.EnrolmentDate.ToString("dd MMM yyyy")
+                            </td>
+
+                            <td>
+                                @if (enrolment.Status == "Approved")
+                                {
+                                    <span class="badge bg-success">
+                                        Approved
+                                    </span>
+                                }
+                                else if (enrolment.Status == "Rejected")
+                                {
+                                    <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        @enrolment.Status
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No participant enrolments are currently available.
+        </div>
+    }
+
+</div>

@@ -1,0 +1,89 @@
+﻿@model List<RaceDay.MVC.Models.ResultViewModel>
+
+@{
+    ViewData["Title"] = "Race Results";
+}
+
+<div class="container mt-4">
+
+    <h1>My Race Results</h1>
+
+    <p>View your recorded race results below.</p>
+
+    <a asp-controller="Participant"
+       asp-action="Index"
+       class="btn btn-secondary mb-3">
+        Back to Dashboard
+    </a>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            No race results are available yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Event</th>
+                        <th>Category</th>
+                        <th>Finish Time</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var result in Model)
+                    {
+                        <tr>
+                            <td>@result.EventTitle</td>
+                            <td>@result.CategoryName</td>
+
+                            <td>
+                                @if (result.FinishTime.HasValue)
+                                {
+                                    @result.FinishTime.Value.ToString("HH:mm:ss")
+                                }
+                                else
+                                {
+                                    <span>Not recorded</span>
+                                }
+                            </td>
+
+                            <td>
+                                @(result.Position?.ToString() ?? "Not recorded")
+                            </td>
+
+                            <td>
+                                @if (result.IsDnf)
+                                {
+                                    <span class="badge bg-danger">
+                                        Did Not Finish
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        Completed
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
